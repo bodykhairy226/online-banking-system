@@ -62,13 +62,16 @@
       align-items: center;
     }
 
-    .form-container {
-      background-color: rgba(255, 255, 255, 0.95);
-      padding: 40px 50px;
-      border-radius: 20px;
-      width: 420px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
+.form-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 45px 55px;   /* زودنا padding بسيط */
+  border-radius: 20px;
+  width: 460px;         /* كان 420 */
+  min-height: 480px;
+    /* ارتفاع ثابت للرسائل */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
 
     h2 {
       text-align: center;
@@ -130,6 +133,32 @@
       text-align: center;
       font-size: 14px;
     }
+    /* ===== Register Message ===== */
+#registerMessage {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Success */
+#registerMessage.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Error */
+#registerMessage.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
   </style>
 </head>
 
@@ -218,6 +247,7 @@
         <div class="login">
           Already have an account? <a href="login.html">Log In</a>
         </div>
+        <div id="registerMessage" class="message"></div>
       </form>
     </div>
   </div>
@@ -264,6 +294,40 @@ document.querySelectorAll(".nextBtn").forEach((btn, i) => {
     clearError();
   });
 });
+function showMessage(text, type) {
+  const messageDiv = document.getElementById("registerMessage");
+
+  messageDiv.textContent = text;
+  messageDiv.classList.remove("success", "error");
+  messageDiv.classList.add(type);
+  messageDiv.style.display = "block";
+
+  // تختفي تلقائي بس لو خطأ
+  if (type === "error") {
+    setTimeout(() => {
+      messageDiv.style.display = "none";
+    }, 8000);
+  }
+}
+
+
+function showError(text) {
+  showMessage(text, "error");
+}
+
+function showSuccess(text) {
+  showMessage(text, "success");
+}
+
+function clearError() {
+  const messageDiv = document.getElementById("registerMessage");
+
+  // امسح بس لو كانت رسالة خطأ
+  if (messageDiv.classList.contains("error")) {
+    messageDiv.style.display = "none";
+  }
+}
+
 
 /* ===== Submit Form ===== */
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
@@ -328,24 +392,24 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 };
 
 localStorage.setItem("currentUser", JSON.stringify(userData));
+showSuccess("✅ Account created successfully");
 
-localStorage.setItem("currentUser", JSON.stringify(userData));
+setTimeout(() => {
 
-   
-document.querySelector('button[type="submit"]').style.display = "none";
+  document.querySelector('button[type="submit"]').style.display = "none";
 
-// اخفاء كل خطوات التسجيل
-document.querySelectorAll(".step").forEach(step => {
-  step.style.display = "none";
-});
+  document.querySelectorAll(".step").forEach(step => {
+    step.style.display = "none";
+  });
 
-// اخفاء الشروط واللينكات
-document.querySelector(".checkbox").style.display = "none";
-document.querySelector(".login").style.display = "none";
+  document.querySelector(".checkbox").style.display = "none";
+  document.querySelector(".login").style.display = "none";
 
-// اظهار زرارين Add Card و Skip
-document.getElementById("addCardBtn").style.display = "block";
-document.getElementById("skipCardBtn").style.display = "block";
+  document.getElementById("addCardBtn").style.display = "block";
+  document.getElementById("skipCardBtn").style.display = "block";
+
+}, 800); // تأخير بسيط
+
 
 
   } catch (err) {

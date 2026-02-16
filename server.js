@@ -26,8 +26,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/onlineBankingDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log("✅ تم الاتصال بقاعدة بيانات MongoDB بنجاح."))
-  .catch((err) => console.error("❌ خطأ في الاتصال بقاعدة البيانات:", err));
+  .then(() => console.log("conncted to MongoDB succfully."))
+  .catch((err) => console.error("error to connect to data base ", err));
 
 // Schema
 const userSchema = new mongoose.Schema({
@@ -56,10 +56,17 @@ const cardSchema = new mongoose.Schema({
     required: true
   },
 
-  accountNumber: {
-    type: String,
-    required: true
-  },
+accountNumber: {
+  type: String,
+  required: true,
+  validate: {
+    validator: function(v) {
+      return /^[0-9]{16}$/.test(v);
+    },
+    message: "Card number must be exactly 16 digits"
+  }
+},
+
 
   cardType: {
     type: String,
@@ -84,6 +91,14 @@ const cardSchema = new mongoose.Schema({
   
 }, { timestamps: true });
 const Card = mongoose.model("Card", cardSchema);
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: { type: String, required: true },
+  message: { type: String, required: true }
+}, { timestamps: true });
+
+const Contact = mongoose.model("Contact", contactSchema);
 
 // Helpers
 function validateEmail(email) {
@@ -436,13 +451,22 @@ app.post("/add-card", async (req, res) => {
       cardPassword
     } = req.body;
 
+    // 1️⃣ Check required fields
     if (
       !userId || !cardName || !accountNumber ||
       !cardType || !expiryDate || !cvv || !cardPassword
     ) {
-      return res.status(400).json({ message: "جميع الحقول مطلوبة" });
+      return res.status(400).json({ message: "all fields are required" });
     }
 
+    // 2️⃣ Validate card number (must be exactly 16 digits)
+    if (!/^[0-9]{16}$/.test(accountNumber)) {
+      return res.status(400).json({
+        message: "Card number must be exactly 16 digits"
+      });
+    }
+
+    // 3️⃣ Hash card password
     const hashedCardPassword = await bcrypt.hash(cardPassword, SALT_ROUNDS);
 
     const newCard = new Card({
@@ -457,12 +481,13 @@ app.post("/add-card", async (req, res) => {
 
     await newCard.save();
 
-    res.status(201).json({ message: "تم إضافة الكارت بنجاح" });
+    res.status(201).json({ message: "card was added successfuly" });
 
   } catch (err) {
-    res.status(500).json({ message: "خطأ في السيرفر", error: err.message });
+    res.status(500).json({ message: "server error", error: err.message });
   }
 });
+
 
 // Get Card by UserId
 app.get("/card/:userId", async (req, res) => {
@@ -472,7 +497,7 @@ app.get("/card/:userId", async (req, res) => {
     const card = await Card.findOne({ userId });
 
     if (!card) {
-      return res.status(404).json({ message: "لا يوجد كارت لهذا المستخدم" });
+      return res.status(404).json({ message: "no user for this card" });
     }
 
     // رجّع بيانات آمنة (من غير cvv ولا password)
@@ -482,7 +507,7 @@ app.get("/card/:userId", async (req, res) => {
 
   } catch (err) {
     res.status(500).json({
-      message: "خطأ في السيرفر",
+      message: "server error",
       error: err.message
     });
   }
@@ -506,19 +531,19 @@ const card = await Card.findOne({ accountNumber: cleanCardNumber });
     // 2️⃣ التحقق من PIN
     const match = await bcrypt.compare(cardPassword, card.cardPassword);
     if (!match) {
-      return res.status(401).json({ message: "الـ PIN غير صحيح" });
+      return res.status(401).json({ message: "Invalid PIN." });
     }
 
     // 3️⃣ جلب المستخدم
     const user = await User.findById(card.userId);
     if (!user) {
-      return res.status(404).json({ message: "المستخدم غير موجود" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // 4️⃣ تنفيذ العملية
     if (type === "withdrawal") {
       if (user.balance < amount) {
-        return res.status(400).json({ message: "الرصيد غير كافي" });
+        return res.status(400).json({ message:"Insufficient balance" });
       }
       user.balance -= Number(amount);
     }
@@ -540,14 +565,14 @@ const card = await Card.findOne({ accountNumber: cleanCardNumber });
 
 
     res.json({
-      message: "تمت العملية بنجاح",
+      message: "operation was completed successfully",
       newBalance: user.balance
     });
  
   
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "خطأ في السيرفر" });
+    res.status(500).json({ message: "server error" });
   }
 });
 app.get("/transactions/:userId", async (req, res) => {
@@ -560,7 +585,32 @@ app.get("/transactions/:userId", async (req, res) => {
     res.json(transactions);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "خطأ في السيرفر" });
+    res.status(500).json({ message: "server error " });
+  }
+});
+app.post("/contact", async (req, res) => {
+  try {
+    const { name, phone, email, message } = req.body;
+
+    if (!name || !phone || !email || !message) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const newMessage = new Contact({
+      name,
+      phone,
+      email,
+      message
+    });
+
+    await newMessage.save();
+
+res.json({ message: "Message sent successfully ✅" });
+
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: " server error" });
   }
 });
 
@@ -571,5 +621,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 السيرفر شغال على http://localhost:${PORT}`);
+  console.log(`server running in  http://localhost:${PORT}`);
 });

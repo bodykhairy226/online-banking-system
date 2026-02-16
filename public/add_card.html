@@ -95,6 +95,26 @@
     button:hover {
       background-color: #046b52;
     }
+    .message {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  display: none;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
   </style>
 </head>
 
@@ -136,85 +156,79 @@
         <input type="password" id="cvv" placeholder="CVV" required>
         <input type="password" id="cardPassword" placeholder="Card Password" required>
 
-        <button type="submit">Save Card</button>
-      </form>
+<button type="submit">Save Card</button>
+</form>
+
+<div id="cardMessage" class="message"></div>
+
 
     </div>
   </div>
 
   
 <script>
-document.getElementById("cardForm").addEventListener("submit", async (e) => {
+
+document.getElementById("cardForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  // 1️⃣ هات المستخدم
+  const messageDiv = document.getElementById("cardMessage");
+
+  const cardName = document.getElementById("cardName").value;
+  const accountNumber = document.getElementById("accountNumber").value;
+  const cardType = document.getElementById("cardType").value;
+  const expiryDate = document.getElementById("expiryDate").value;
+  const cvv = document.getElementById("cvv").value;
+  const cardPassword = document.getElementById("cardPassword").value;
+
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user || !user._id) {
-    alert("❌ لازم تسجل دخول الأول");
-    window.location.href = "login.html";
-    return;
-  }
-
-  // 2️⃣ هات القيم من الـ inputs (بشكل صريح)
-  const payload = {
-    userId: user._id,
-    cardName: document.getElementById("cardName").value.trim(),
-    accountNumber: document.getElementById("accountNumber").value.trim(),
-    cardType: document.getElementById("cardType").value,
-    expiryDate: document.getElementById("expiryDate").value.trim(),
-    cvv: document.getElementById("cvv").value.trim(),
-    cardPassword: document.getElementById("cardPassword").value
-  };
-
-  // 3️⃣ Validation بسيط
-  for (let key in payload) {
-    if (!payload[key]) {
-      alert("⚠️ من فضلك املأ جميع الحقول");
-      return;
-    }
-  }
 
   try {
-    // 4️⃣ ابعت البيانات
-    const res = await fetch("http://localhost:3000/add-card", {
+
+    const response = await fetch("http://localhost:3000/add-card", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        cardName,
+        accountNumber,
+        cardType,
+        expiryDate,
+        cvv,
+        cardPassword
+      })
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if (!res.ok) {
-      alert(data.message || "❌ خطأ في إضافة الكارت");
-      return;
+    messageDiv.style.display = "block";
+    messageDiv.textContent = data.message;
+
+    if (response.ok) {
+      messageDiv.className = "message success";
+
+      // بعد ثانيتين يروح للدashboard
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 3000);
+
+    } else {
+      messageDiv.className = "message error";
     }
-
-    const cardData = {
-      userId: user._id,
-      cardName: payload.cardName,
-      accountNumber: payload.accountNumber,
-      expiryDate: payload.expiryDate,
-      cardType: payload.cardType
-    };
-
-
-    alert("✅ تم إضافة الكارت بنجاح");
-    window.location.href = "dashboard.html";
-
-    const existCard = await Card.findOne({ userId });
-if (existCard) {
-  return res.status(409).json({
-    message: "لديك كارت بالفعل"
-  });
-}
-
 
   } catch (err) {
     console.error(err);
-    alert("❌ فشل الاتصال بالسيرفر");
+
+    messageDiv.style.display = "block";
+    messageDiv.textContent = "Server error";
+    messageDiv.className = "message error";
   }
+
 });
+
 </script>
+
 
 </body>
 </html>

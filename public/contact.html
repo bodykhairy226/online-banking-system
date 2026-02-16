@@ -110,6 +110,10 @@ body {
   background: rgba(223,242,230,0.7);
   transform: translateX(5px);
 }
+.sidebar a {
+  text-decoration: none;
+  color: #0b6b4a;
+}
 
 /* ===== Main ===== */
 .main {
@@ -186,6 +190,16 @@ button:hover {
   background: #097043;
   transform: scale(1.05);
 }
+.success-message {
+  display: none;
+  background: #d4edda;
+  color: #155724;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+}
 
 /* ===== Responsive ===== */
 @media(max-width:720px){
@@ -206,62 +220,115 @@ button:hover {
 <div class="card">
 
   <!-- Header -->
-  <header class="header">
-    <img src="https://i.postimg.cc/QCrwp4pC/Picsart-25-10-01-17-11-01-636.png">
-    <nav class="nav">
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Login</a>
-      <a href="#">Sign Up</a>
-    </nav>
-  </header>
+<header class="header">
+  <img src="https://i.postimg.cc/QCrwp4pC/Picsart-25-10-01-17-11-01-636.png">
+
+  <nav class="nav">
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Sign Up</a>
+  </nav>
+</header>
+
 
   <div class="body">
 
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="item">
-        <img src="https://i.postimg.cc/Dyp5hp80/dashboard.png"> Dashboard
-      </div>
-      <div class="item">
-        <img src="https://i.postimg.cc/J06F91fn/arrows.png"> Transfer
-      </div>
-      <div class="item">
-        <img src="https://i.postimg.cc/h41c2ThY/debit-card.png"> Card
-      </div>
-      <div class="item">
-        <img src="https://i.postimg.cc/0292vZLx/account.png"> Profile
-      </div>
-      <div class="item">
-        <img src="https://i.postimg.cc/fycLKrpP/logout.png"> Logout
-      </div>
-    </aside>
+<aside class="sidebar">
+
+  <a href="dashboard.html" class="item">
+    <img src="https://i.postimg.cc/Dyp5hp80/dashboard.png">
+    Dashboard
+  </a>
+
+  <a href="bank.html" class="item">
+    <img src="https://i.postimg.cc/J06F91fn/arrows.png">
+    Transfer
+  </a>
+
+  <a href="card.html" class="item">
+    <img src="https://i.postimg.cc/h41c2ThY/debit-card.png">
+    Card
+  </a>
+
+  <a href="profile.html" class="item">
+    <img src="https://i.postimg.cc/0292vZLx/account.png">
+    Profile
+  </a>
+
+  <a href="login.html" class="item">
+    <img src="https://i.postimg.cc/fycLKrpP/logout.png">
+    Logout
+  </a>
+
+</aside>
+
 
     <!-- Main -->
     <main class="main">
       <div class="contact-box">
         <h2>Contact Us</h2>
 
-        <form>
-          <label>Full Name</label>
-          <input type="text" placeholder="Enter your name">
+<form>
 
-          <label>Phone Number</label>
-          <input type="text" placeholder="Enter your phone number">
+  <label>Full Name</label>
+  <input id="name" type="text" placeholder="Enter your name">
 
-          <label>Email</label>
-          <input type="email" placeholder="Enter your email">
+  <label>Phone Number</label>
+  <input id="phone" type="text" placeholder="Enter your phone number">
 
-          <label>Message</label>
-          <textarea placeholder="Write your message..."></textarea>
+  <label>Email</label>
+  <input id="email" type="email" placeholder="Enter your email">
 
-          <button type="submit">Send</button>
-        </form>
+  <label>Message</label>
+  <textarea id="message" placeholder="Write your message..."></textarea>
+
+  <button type="submit">Send</button>
+
+</form>
+
+
+<div id="successMessage" class="success-message">
+  ✅ تم إرسال الرسالة بنجاح
+</div>
+
       </div>
     </main>
 
   </div>
 </div>
+<script>
+document.querySelector("form").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
+
+  const res = await fetch("http://localhost:3000/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, phone, email, message })
+  });
+
+  const data = await res.json();
+const msg = document.getElementById("successMessage");
+
+msg.style.display = "block";
+
+// إخفاء بعد 3 ثواني
+setTimeout(() => {
+  msg.style.display = "none";
+}, 3000);
+
+// تفريغ الفورم
+document.querySelector("form").reset();
+
+});
+</script
 </body>
 </html>
