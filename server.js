@@ -12,8 +12,7 @@ const SALT_ROUNDS = 10;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGO_URI =
-  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/onlineBankingDB";
+const MONGO_URI = process.env.MONGO_URI;
 
 // Middlewares
 app.use(
