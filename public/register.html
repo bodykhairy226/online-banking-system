@@ -272,7 +272,7 @@
           <div class="buttons">
   <button type="button" class="backBtn">Back</button>
   <button type="submit" class="btn">Register</button>
-</div>>
+</div>
         </div>
 <button
   type="button"
@@ -309,13 +309,10 @@
 
 
 <script>
- const API_URL = "https://online-banking-system-production-fb01.up.railway.app";
+const API_URL = "https://online-banking-system-production-fb01.up.railway.app/";
 const errorBox = document.getElementById("errorBox");
 
-function showError(msg) {
-  errorBox.style.display = "block";
-  errorBox.textContent = msg;
-}
+
 
 function clearError() {
   errorBox.style.display = "none";
@@ -463,21 +460,31 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
   console.log("Register Payload:", payload);
 
+try {
+
+  const res = await fetch(`${API_URL}register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await res.text();
+  console.log("SERVER RESPONSE:", text);
+
+  let data;
   try {
-    const res = await fetch(`${API_URL}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    data = JSON.parse(text);
+  } catch {
+    data = { message: text };
+  }
 
-    const data = await res.json();
+  if (!res.ok) {
+    showError(data.message || "error creating account");
+    return;
+  }
 
-    if (!res.ok) {
-      showError(data.message || "error creat accont");
-      return;
-    }
 
    const userData = {
   _id: data.user._id,
