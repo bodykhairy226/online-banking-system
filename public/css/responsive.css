@@ -1,0 +1,64 @@
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+
+@media (max-width:768px){
+
+/* NAVBAR */
+
+.top-nav{
+padding:10px 15px;
+}
+
+.top-nav ul{
+gap:15px;
+overflow-x:auto;
+white-space:nowrap;
+}
+
+
+/* LOGIN PAGE */
+
+.login-box{
+width:95%;
+margin-top:150px;
+padding:35px 20px;
+}
+
+.login-box h2{
+font-size:24px;
+}
+
+}
+
+
+/* ================================
+   DASHBOARD / TRANSFER PAGES
+================================ */
+
+@media (max-width:720px){
+
+.body{
+flex-direction:column;
+}
+
+
+/* SIDEBAR */
+
+.sidebar{
+width:100%;
+display:flex;
+justify-content:space-around;
+border-right:none;
+border-bottom:2px solid rgba(213,233,219,0.7);
+}
+
+
+/* TRANSFER BUTTON */
+
+.transfer-form button{
+width:100%;
+margin-top:10px;
+}
+
+}

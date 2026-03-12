@@ -1,273 +1,39 @@
+/* LOGIN PAGE */
 
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216') center/cover no-repeat;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;  
-  }
-
-    /* ✅ Navbar */
-    .top-nav {
-      width: 90%;
-      background-color: rgba(213, 232, 212, 0.4);
-      margin: 20px auto 0;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 50px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(6px);
-      z-index: 1000;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-
-    .top-nav .logo img {
-      height: 50px;
-      width: auto;
-    }
-
-    .top-nav ul {
-      list-style: none;
-      display: flex;
-      gap: 45px;
-      margin: 0;
-    }
-
-    .top-nav ul li {
-      cursor: pointer;
-      font-weight: 700;
-      transition: 0.3s;
-      color: #083c24;
-      font-size: 17px;
-      letter-spacing: 1px;
-    }
-
-    .top-nav ul li:hover {
-      color: #2f8a64;
-      transform: scale(1.05);
-    }
-
-    /* ✅ Login Box */
-   .login-box {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 60px 50px;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-
-  width: 90%;
-  max-width: 600px;
-
-  text-align: center;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  margin-top: 180px;
+body{
+background:url('https://images.unsplash.com/photo-1521791136064-7986c2920216') center/cover no-repeat;
 }
 
-    .login-box h2 {
-      margin-bottom: 30px;
-      font-size: 30px;
-      text-transform: lowercase;
-      color: #083c24;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 25px;
-    }
-
-    .input-group .icon {
-      position: absolute;
-      top: 50%;
-      left: 15px;
-      transform: translateY(-50%);
-      width: 25px;
-      height: 25px;
-      object-fit: contain;
-      opacity: 0.8;
-      pointer-events: none;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 18px 50px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      border-radius: 8px;
-      outline: none;
-      font-size: 18px;
-      transition: 0.3s;
-      background-color: rgba(255,255,255,0.25);
-      color: #000;
-    }
-
-    .input-group input:focus {
-      border-color: #0B7C2C;
-      box-shadow: 0 0 8px #0B7C2C33;
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .toggle {
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 22px;
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 18px;
-      border: none;
-      background: rgba(255, 255, 255, 0.3);
-      color: #083c24;
-      font-size: 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .login-btn:hover {
-      background: rgba(11, 124, 44, 0.8);
-      color: #fff;
-    }
-
-    .register {
-      margin-top: 25px;
-      font-size: 22px;
-      color: #000;
-    }
-
-    .register a {
-      color: #000;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .register a:hover {
-      text-decoration: underline;
-    }
-    .logo img {
-  width: 80px; /* أو المقاس اللي يناسبك */
-  transition: transform 0.5s ease, filter 0.5s ease;
-  cursor: pointer;
-}
-
-/* لما تقف على اللوجو */
-.logo img:hover {
-  transform: rotate(10deg) scale(1.1);
-  filter: brightness(1.2);
-}
-.top-nav ul li a {
-  color: black !important; /* يخلي اللون أسود دايمًا */
-  text-decoration: none;
-  font-weight: bold;
-  transition: transform 0.3s ease;
-}
-
-.top-nav ul li a:hover {
-  transform: scale(1.1);
-  color: black !important; /* حتى في hover يفضل أسود */
-}
-
-/* زر sign up */
-.signup {
-  background-color: transparent;
-  color: black !important;
-  border: 2px solid black;
-  padding: 6px 12px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-
-.signup:hover {
-  background-color: black;
-  color: white !important;
-}
-/* ===== Login Message ===== */
-.form-message {
-  display: none;
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: bold;
-  text-align: center;
-  font-size: 14px;
-  width: 100%;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.form-message.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.form-message.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
-
-@media (max-width:768px){
-
-.top-nav{
-padding:10px 15px;
-flex-direction:row;
-align-items:center;
-}
-
-.top-nav ul{
-flex-direction:row;
-gap:15px;
-flex-wrap:nowrap;
-overflow-x:auto;
-white-space:nowrap;
-}
-.top-nav{
-overflow-x:auto;
-}
-
-.top-nav ul li a{
-font-size:14px;
-}
+/* LOGIN BOX */
 
 .login-box{
-width:95%;
-margin-top:150px;
-padding:35px 20px;
+background:rgba(255,255,255,.2);
+padding:60px 50px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+width:90%;
+max-width:600px;
+text-align:center;
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.3);
+margin-top:180px;
 }
 
 .login-box h2{
-font-size:24px;
-}
-
-.input-group input{
-font-size:16px;
-padding:14px 45px;
-}
-
-.login-btn{
-font-size:18px;
-padding:14px;
+margin-bottom:30px;
+font-size:30px;
+color:#083c24;
 }
 
 .register{
-font-size:16px;
+margin-top:25px;
+font-size:22px;
 }
 
+.toggle{
+position:absolute;
+top:50%;
+right:15px;
+transform:translateY(-50%);
+cursor:pointer;
 }

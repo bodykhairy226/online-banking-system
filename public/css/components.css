@@ -1,0 +1,197 @@
+/* ================================
+   INPUT GROUP
+================================ */
+
+.input-group{
+position:relative;
+margin-bottom:25px;
+}
+
+.input-group input{
+width:100%;
+padding:18px 50px;
+border-radius:8px;
+border:1px solid rgba(255,255,255,.5);
+font-size:18px;
+background-color:rgba(255,255,255,.25);
+}
+
+
+/* ================================
+   ICON
+================================ */
+
+.icon{
+position:absolute;
+top:50%;
+left:15px;
+transform:translateY(-50%);
+width:25px;
+height:25px;
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+.login-btn{
+width:100%;
+padding:18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.nextBtn,
+.btn{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:none;
+background-color:#007b5e;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.nextBtn:hover,
+.btn:hover{
+background-color:#046b52;
+}
+
+
+/* ================================
+   FORM MESSAGE
+================================ */
+
+.form-message{
+display:none;
+margin-top:15px;
+padding:12px;
+border-radius:10px;
+font-weight:bold;
+text-align:center;
+}
+
+.form-message.success{
+background:#d4edda;
+color:#155724;
+}
+
+.form-message.error{
+background:#f8d7da;
+color:#721c24;
+}
+
+
+/* ================================
+   FORM CONTAINER
+================================ */
+
+.form-container{
+background-color:rgba(255,255,255,.95);
+padding:45px 55px;
+border-radius:20px;
+width:460px;
+min-height:480px;
+box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+h2{
+text-align:center;
+color:#0b5134;
+margin-bottom:20px;
+}
+
+.step input{
+width:100%;
+padding:12px;
+margin-bottom:20px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:15px;
+}
+
+
+/* ================================
+   CARD COMPONENT
+================================ */
+
+.card{
+width:850px;
+max-width:100%;
+background:rgba(255,255,255,0.25);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.3);
+border-radius:10px;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+overflow:hidden;
+display:flex;
+flex-direction:column;
+animation:fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(30px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:rgba(234,248,240,0.6);
+padding:16px 22px;
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+}
+
+.header .brand{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.header .brand img{
+height:50px;
+border-radius:6px;
+transition:transform .4s;
+}
+
+.header .brand img:hover{
+transform:scale(1.1);
+}
+
+
+/* ================================
+   NAV LINKS
+================================ */
+
+.nav a{
+text-decoration:none;
+color:#064a31;
+font-weight:600;
+margin-left:18px;
+position:relative;
+}
+
+.nav a::after{
+content:'';
+position:absolute;
+bottom:-4px;
+left:0;
+width:0;
+height:2px;
+background:#0b6b4a;
+transition:.3s;
+}
+
+.nav a:hover::after{
+width:100%;
+}
