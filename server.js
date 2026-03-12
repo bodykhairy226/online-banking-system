@@ -15,16 +15,14 @@ const SALT_ROUNDS = 10;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const mongo = process.env.mongo;
-console.log("ENV:", process.env);
-console.log("mongo variable:", process.env.mongo);
-console.log("MONGO_URI =", mongo);
+const mongo = process.env.MONGO_URI;
+
+console.log("Mongo URI:", mongo);
 
 mongoose
   .connect(mongo)
-  .then(() => console.log("connected to MongoDB successfully"))
-  .catch((err) => console.error("error to connect to database", err));
-
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("Mongo error:", err));
 // Middlewares
 app.use(
   cors({
