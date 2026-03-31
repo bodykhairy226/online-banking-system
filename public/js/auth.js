@@ -125,10 +125,36 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   /* ===== Validations ===== */
   if (password !== confirmPassword) {
     showError("password does not match");
+    // 🔐 Password strength
+if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)) {
+  showError("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol");
+  return;
+}
     return;
   }
-  if (!email.includes("@")) {
-  showError("Invalid email");
+// 📧 Email validation
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  showError("Invalid email format");
+  return;
+}
+// 📱 Phone validation (Egypt)
+if (!/^01[0-9]{9}$/.test(phone)) {
+  showError("Invalid Egyptian phone number (must be 11 digits and start with 01)");
+  return;
+}
+// 🎂 Age validation (21+)
+const birthDate = new Date(dob);
+const today = new Date();
+
+let age = today.getFullYear() - birthDate.getFullYear();
+const monthDiff = today.getMonth() - birthDate.getMonth();
+
+if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  age--;
+}
+
+if (age < 21) {
+  showError("You must be at least 21 years old");
   return;
 }
 
