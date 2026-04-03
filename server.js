@@ -29,7 +29,8 @@ const limiter = rateLimit({
 
 mongoose.set("strictQuery", true);
 console.log("ENV TEST:", process.env.MONGO);
-
+console.log("DB NAME:", mongoose.connection.name);
+console.log("DB HOST:", mongoose.connection.host);
 mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
