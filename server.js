@@ -1,6 +1,5 @@
     // server.js
-    console.log("DB NAME:", mongoose.connection.name);
-console.log("DB HOST:", mongoose.connection.host);
+  
     import dotenv from "dotenv";
 dotenv.config();
     import helmet from "helmet";
@@ -15,7 +14,7 @@ dotenv.config();
     const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
     const JWT_EXPIRES = "6h";
     const SALT_ROUNDS = 10;
-
+ 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -28,7 +27,7 @@ const limiter = rateLimit({
     app.use(express.static("public"));
     app.use(helmet());
     app.disable("x-powered-by");
-
+  
 mongoose.set("strictQuery", true);
 console.log("ENV TEST:", process.env.MONGO);
 
@@ -42,7 +41,8 @@ mongoose.connect(process.env.MONGO, {
 .catch((err) => {
   console.error("MongoDB Error ❌:", err);
 });
-
+ console.log("DB NAME:", mongoose.connection.name);
+console.log("DB HOST:", mongoose.connection.host);
      
     // Middlewares
   
