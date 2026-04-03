@@ -28,9 +28,9 @@ const limiter = rateLimit({
     app.disable("x-powered-by");
 
 mongoose.set("strictQuery", true);
-console.log("ENV TEST:", process.env.MONGO_URI);
+console.log("ENV TEST:", process.env.MONGO);
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
