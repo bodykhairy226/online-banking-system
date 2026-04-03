@@ -589,4 +589,6 @@ if (user.loginAttempts >= 4) {
     });
 
 
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
